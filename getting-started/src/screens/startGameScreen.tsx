@@ -19,7 +19,7 @@ export default function StartGameScreen({ onPressedNumber }: Props) {
   }
 
   function handleConfirm() {
-    console.log('pressed');
+    // console.log('pressed');
     const value = parseInt(enteredNumber as string);
 
     if (isNaN(value) || value <= 0 || value > 99) {

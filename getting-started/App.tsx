@@ -2,18 +2,45 @@ import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
 import StartGameScreen from './src/screens/startGameScreen';
 import { useState } from 'react';
 import GameScreen from './src/screens/gameScreen';
+import GameOverScreen from './src/screens/gameOverScreen';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 export default function App() {
   const [numberPressed, setNumberPressed] = useState<string>('');
-  function handlePressedNumber(value: string) {
-    setNumberPressed(value);
+  const [gameIsOver, setGameIsOver] = useState<boolean>(true);
+
+  const [fontLoaded] = useFonts({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  });
+
+  if (!fontLoaded) {
+    return <AppLoading />;
   }
 
-  const screen = numberPressed ? (
-    <GameScreen />
+  function handlePressedNumber(value: string) {
+    setNumberPressed(value);
+    setGameIsOver(false);
+  }
+
+  function gameOverHandler() {
+    setGameIsOver(true);
+  }
+
+  let screen = numberPressed ? (
+    <GameScreen
+      userNumber={Number(numberPressed)}
+      onGameOver={gameOverHandler}
+    />
   ) : (
     <StartGameScreen onPressedNumber={handlePressedNumber} />
   );
+
+  if (gameIsOver && numberPressed) {
+    screen = <GameOverScreen />;
+  }
+
   return (
     <View style={styles.contaier}>
       <ImageBackground

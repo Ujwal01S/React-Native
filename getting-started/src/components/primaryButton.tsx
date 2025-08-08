@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     textAlign: 'center',
+    fontFamily: 'open-sans-bold',
   },
   container: {
     backgroundColor: '#410925ff',
