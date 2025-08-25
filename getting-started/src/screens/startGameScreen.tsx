@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import { Alert, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import PrimaryButton from '../components/primaryButton';
 
 interface Props {
   onPressedNumber: (value: string) => void;
 }
+const deviceWidth = Dimensions.get('window').width;
 
 export default function StartGameScreen({ onPressedNumber }: Props) {
   const [enteredNumber, setEnteredNumber] = useState<string | undefined>('');
+
+  const { height, width } = useWindowDimensions();
 
   function handleInputChange(value: string) {
     setEnteredNumber(value);
@@ -30,29 +42,46 @@ export default function StartGameScreen({ onPressedNumber }: Props) {
     onPressedNumber(enteredNumber as string);
   }
 
+  const dynamicRenderingDeviceWidth = width < 450 ? 60 : 70;
+  const dynamicRenderingDeviceHeight = height < 450 ? 60 : 70;
+
+  // below we have added dynamic width when user change orientation the width/ height of device changes and we need to re-render the with changed width/height css
+
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.numberInput}
-        maxLength={2}
-        keyboardType='number-pad'
-        autoCapitalize='none'
-        autoCorrect={false}
-        onChangeText={handleInputChange}
-        value={enteredNumber}
-      />
-      <View style={styles.buttonBox}>
-        <PrimaryButton onPress={handleReset}>Reset</PrimaryButton>
-        <PrimaryButton onPress={handleConfirm}>Confirm</PrimaryButton>
-      </View>
-    </View>
+    <ScrollView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior='position'>
+        <View
+          style={[
+            styles.container,
+            { marginTop: dynamicRenderingDeviceHeight < 320 ? 50 : 100 },
+          ]}
+        >
+          <TextInput
+            style={[
+              styles.numberInput,
+              { width: dynamicRenderingDeviceWidth < 450 ? 60 : 70 },
+            ]}
+            maxLength={2}
+            keyboardType='number-pad'
+            autoCapitalize='none'
+            autoCorrect={false}
+            onChangeText={handleInputChange}
+            value={enteredNumber}
+          />
+          <View style={styles.buttonBox}>
+            <PrimaryButton onPress={handleReset}>Reset</PrimaryButton>
+            <PrimaryButton onPress={handleConfirm}>Confirm</PrimaryButton>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    marginTop: 100,
+    // marginTop: 100,
     marginHorizontal: 16,
     backgroundColor: '#7d1449ff',
     borderRadius: 8,
@@ -73,7 +102,7 @@ const styles = StyleSheet.create({
     color: '#ddb52f',
     marginVertical: 8,
     fontWeight: 'bold',
-    width: 70,
+    // width: deviceWidth < 450 ? 60 : 70,
   },
   buttonBox: {
     flexDirection: 'row',

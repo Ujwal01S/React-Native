@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "getting-started",
-    "slug": "getting-started",
+    "name": "my-expo-ts-app",
+    "slug": "my-expo-ts-app",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -24,7 +24,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": ["expo-font"]
+    }
   }
 }
