@@ -1,8 +1,8 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { MEALS } from "../data/dummy-data";
-import MealItem from "../components/meal-item";
+import { CATEGORIES, MEALS } from "../data/dummy-data";
+import MealItem, { ItemProps } from "../components/meal-item";
 
 // Define your navigation stack's route parameters
 type RootStackParamList = {
@@ -22,16 +22,34 @@ const MealsOverviewScreen = ({ navigation, route }: Props) => {
   // console.log({ params: route.params.overviewId });
 
   const mealId = route.params.overviewId;
+
   const displayedMeals = MEALS.filter((mealItem) => {
     return mealItem.categoryIds.indexOf(Number(mealId) >= 0);
   });
 
-  function renderItemHandler({
-    item,
-  }: {
-    item: { id: number; title: string };
-  }) {
-    return <MealItem title={item.title} />;
+  useLayoutEffect(() => {
+    const categoryTitle = CATEGORIES.find(
+      (category) => category.id === mealId
+    )?.title;
+
+    navigation.setOptions({
+      title: categoryTitle,
+    });
+
+    // console.log(categoryTitle);
+  }, [mealId, navigation]);
+
+  function renderItemHandler({ item }: { item: ItemProps }) {
+    return (
+      <MealItem
+        title={item.title}
+        imageUrl={item.imageUrl}
+        affordability={item.affordability}
+        complexity={item.complexity}
+        duration={item.duration}
+        id={item.id}
+      />
+    );
   }
 
   return (
