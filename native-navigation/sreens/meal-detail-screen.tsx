@@ -30,7 +30,7 @@ const MealDetailScreen = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <Button title='Press Me' onPress={headerButtonPressHandler} />;
+        return <Button title='Favriout' onPress={headerButtonPressHandler} />;
       },
     });
   }, [navigation]);
